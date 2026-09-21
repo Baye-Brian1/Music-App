@@ -4,3 +4,9 @@
 @import "@fontsource-variable/inter";
 
 @custom-variant dark (&:is(.dark *));
+
+@theme{
+  --font-display: "Fraunces", serif;
+  --font-sans: "Inter", sans-serif;
+  --font-mono: "IBM Plex Mono", monospace;
+}
