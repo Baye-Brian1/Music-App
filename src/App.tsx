@@ -1,6 +1,7 @@
 // import AlbumCard from "./components/AlbumCard"
 // import { albums } from "./data/albums"
-import Browse from "@/components/ui/Browse"
+// import Browse from "@/components/ui/Browse"
+import SetList from "./components/SetList"
 
 function App() {
   return(
@@ -13,7 +14,7 @@ function App() {
     //   </div>
     // </div>
     <>
-    <Browse/>
+    <SetList/>
     </>
   )
 }  
