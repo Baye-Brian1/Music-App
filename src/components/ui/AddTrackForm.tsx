@@ -1,5 +1,7 @@
 import { useState } from "react";
 import type { SubmitEvent } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 interface AddTrackFormProps {
   onAdd: (title: string, duration: string) => void;
 }
@@ -17,19 +19,19 @@ function AddTrackForm({ onAdd }: AddTrackFormProps) {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <input
+        <Input
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Track name"
         />
-        <input
+        <Input
           type="text"
           value={duration}
           onChange={(e) => setDuration(e.target.value)}
            placeholder="3:45"
         />
-        <button type="submit">Add</button>
+        <Button type="submit">Add</Button>
       </form>
     </div>
   );

@@ -1,21 +1,19 @@
-// import AlbumCard from "./components/AlbumCard"
-// import { albums } from "./data/albums"
-// import Browse from "@/components/ui/Browse"
-import SetList from "./components/SetList"
+import { Routes, Route } from "react-router-dom";
+import Layout from "@/components/Layout";
+import AlbumGrid from "@/components/ui/AlbumGrid"; // your Day 1 library screen
+import Browse from "@/components/Browse";
+import SetList from "@/components/SetList";
 
 function App() {
-  return(
-    // <div className="min-h-screen bg-[#fafaf8] text-black p-10">
-    //   <h1 className="text-4xl font-semibold font-display mb-8">wax</h1>
-    //   <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
-    //     {albums.map((album)=> (
-    //       <AlbumCard key={album.name} album={album}/>
-    //       ))}
-    //   </div>
-    // </div>
-    <>
-    <SetList/>
-    </>
-  )
-}  
-export default App
+  return (
+    <Routes>
+      <Route element={<Layout />}>
+        <Route path="/" element={<AlbumGrid />} />
+        <Route path="/browse" element={<Browse />} />
+        <Route path="/setlist" element={<SetList />} />
+      </Route>
+    </Routes>
+  );
+}
+
+export default App;
