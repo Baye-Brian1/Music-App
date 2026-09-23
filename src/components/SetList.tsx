@@ -1,6 +1,8 @@
 import { useState } from "react";
 import type { SetTrack} from "@/data/setTracks"
 import {initialSet} from "@/data/setTracks"
+import AddTrackForm from "./ui/AddTrackForm";
+import SetSummary from "./SetSummary";
 
 function SetList() {
     const [setTracks, setSetTracks]= useState<SetTrack[]>(initialSet);
@@ -15,6 +17,7 @@ function SetList() {
         }
         setSetTracks((prev)=> [...prev, newTrack])
     }
+ 
     return(
         <div className="min-h-screen bg-[#fafaf8] text-black p-10">
             <h1 className="text-4xl font-display font-medium mb-8">Build a setlist</h1>
@@ -26,6 +29,8 @@ function SetList() {
                     <button onClick={()=> removeTrack(track.id)}>remove</button>
                 </div>
             ))}
+            <AddTrackForm onAdd={addTrack}/>
+            <SetSummary tracks={setTracks}/>
         </div>
     );
 }
