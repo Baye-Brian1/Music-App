@@ -1,18 +1,31 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Play, Pause } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
+import { useMusic } from "@/context/useMusic";
 
 const navItems = [
   { to: "/", label: "Library" },
   { to: "/browse", label: "Browse" },
-  { to: "/setlist", label: "Setlist" }
+  { to: "/setlist", label: "Setlist" },
 ];
 function Layout() {
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
+  const { audioRef, isPlaying, currentTrack, togglePlay } = useMusic();
+
+  useEffect(() => {
+    if (!audioRef.current) return;
+    if (!isPlaying) {
+      audioRef.current.play();
+    } else {
+      audioRef.current.pause();
+    }
+  }, [currentTrack, isPlaying, audioRef]);
+
   return (
     <div className="min-h-screen bg-[#fafaf8]">
+      <audio ref={audioRef} src={currentTrack?.url} />
       <header className="bg-black text-white">
         <div className="max-w-6xl mx-auto flex px-6 py-4 items-center justify-between">
           <div className="font-display text-2xl">wax.</div>
@@ -84,6 +97,20 @@ function Layout() {
             </motion.nav>
           )}
         </AnimatePresence>
+        {currentTrack && (
+          <div className="fixed bottom-0 left-0 right-0 bg-black text-white px-6 py-3 flex items-center gap-4 border-t border-neutral-800">
+            <button onClick={togglePlay}>
+              {isPlaying ? (
+                <Pause className="w-5 h-5" />
+              ) : (
+                <Play className="w-5 h-5" />
+              )}
+            </button>
+            <span className="text-sm font-medium truncate">
+              {currentTrack.title}
+            </span>
+          </div>
+        )}
       </header>
       <AnimatePresence mode="wait">
         <motion.main

@@ -1,38 +1,31 @@
 import { useState, type SubmitEvent } from "react";
-import { tracks } from "@/data/tracks";
-import type { Track } from "@/data/tracks";
 import { motion, AnimatePresence } from "motion/react";
 import { Input } from "./ui/input";
 import { buttonVariants } from "./ui/button";
 import { Check } from "lucide-react";
+import { useMusic } from "@/context/useMusic";
+import type { ChangeEvent } from "react";
+import { Play, Pause } from "lucide-react";
 
 function Browse() {
+  const { tracks, addTracks, isPlaying, togglePlay, currentTrack, playTrack } =
+    useMusic();
   const [search, setSearch] = useState("");
-  const [genre, setGenre] = useState<"all" | Track["genre"]>("all");
   const [requestText, setRequestText] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
-  const filtered = tracks.filter((track) => {
-    const matchesSearch =
-      track.title.toLowerCase().includes(search.toLowerCase()) ||
-      track.artist.toLowerCase().includes(search.toLowerCase());
-    const matchesGenre = genre === "all" || track.genre === genre;
-    return matchesSearch && matchesGenre;
-  });
-  const genres: Array<"all" | Track["genre"]> = [
-    "all",
-    "slow-burn",
-    "late-night",
-    "driving",
-    "live",
-  ];
-  const genreLabels: Record<Track["genre"] | "all", string> = {
-    all: "All",
-    "slow-burn": "Slow burn",
-    "late-night": "Late night",
-    driving: "Driving",
-    live: "Live takes",
+  const handleUpload = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      addTracks(e.target.files);
+    }
   };
+  const filtered = tracks.filter((track) => {
+    const matchesSearch = track.title
+      .toLowerCase()
+      .includes(search.toLowerCase());
+    return matchesSearch;
+  });
+
   const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSubmitted(true);
@@ -53,63 +46,45 @@ function Browse() {
             placeholder="Search by track name or artist..."
             className="w-full text-[15px] max-w-2xl border border-neutral-300 bg-[#f1efe9] rounded px-3 py-4 mt-3 mb-4 outline-0"
           />
-          <div className="grid grid-cols-3 sm:grid-cols-2 lg:flex gap-2 mb-6">
-            {genres.map((g) => {
-              const isCurrent = genre === g;
-              return (
-                <motion.button
-                  key={g}
-                  onClick={() => setGenre(g)}
-                  className={buttonVariants({
-                    variant: isCurrent ? "default" : "outline",
-                    className: "cursor-pointer",
-                  })}
-                  whileHover={{
-                    scale: 1.05,
-                    y: -2,
-                    transition:{type:"keyframes", duration:0.2}
-                  }}
-                  whileTap={{
-                    scale: 0.95,
-                    y: 0,
-                  }}
-                >
-                  {genreLabels[g]}
-                </motion.button>
-              );
-            })}
-          </div>
-          {filtered.length === 0 ? (
+          <Input
+            type="file"
+            accept="audio/*"
+            multiple
+            onChange={handleUpload}
+            className="mb-6 text-sm"
+          />
+
+          {tracks.length === 0 ? (
             <p className="text-neutral-500">
-              No tracks or artist match "{search}".
+              No tracks uploaded yet add some above.
             </p>
           ) : (
             <table className="w-full">
-              <thead>
-                <tr className="text-left text-xs  font-mono text-neutral-500 border-b border-[#dcd8cc]">
-                  <th className="pb-3 px-2">No</th>
-                  <th className="pb-3">Track</th>
-                  <th className="pb-3 text-right">Time</th>
-                </tr>
-              </thead>
               <tbody>
-                {filtered.map((track, index) => (
-                  <tr
-                    className="border-b border-neutral-300 hover:bg-[#f1efe9] cursor-pointer"
-                    key={track.id}
-                  >
-                    <td className="py-3 px-2 font-mono text-neutral-500">
-                      {String(index + 1).padStart(2, "0")}
-                    </td>
-                    <td className="py-3">
-                      <p className="font-medium">{track.title}</p>
-                      <p className="text-xs text-neutral-500">{track.artist}</p>
-                    </td>
-                    <td className="py-3 tabular-nums text-right font-mono text-neutral-600">
-                      {track.duration}
-                    </td>
-                  </tr>
-                ))}
+                {tracks.map((track, index) => {
+                  const isCurrentTrack = currentTrack?.id === track.id;
+                  return (
+                    <tr
+                      key={track.id}
+                      onClick={() =>
+                        isCurrentTrack ? togglePlay() : playTrack(track)
+                      }
+                      className="border-b border-neutral-300 hover:bg-[#f1efe9] cursor-pointer"
+                    >
+                      <td className="py-3 px-2 font-mono text-neutral-500">
+                        {String(index + 1).padStart(2, "0")}
+                      </td>
+                      <td className="py-3 font-medium">
+                        {track.title}
+                        {isCurrentTrack && isPlaying && (
+                          <span className="ml-2 text-xs text-neutral-500">
+                            <Play className="w-4 h-4"/>Playing
+                          </span>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           )}

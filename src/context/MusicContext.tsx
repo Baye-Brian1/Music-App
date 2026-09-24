@@ -1,4 +1,5 @@
-import { createContext, useContext, useRef, useState } from "react";
+import { useRef, useState } from "react";
+import { MusicContext } from "./useMusic";
 import type { ReactNode } from "react";
 
 interface Track {
@@ -8,7 +9,7 @@ interface Track {
   file: File;
 }
 
-interface MusicContextType {
+export interface MusicContextType {
   tracks: Track[];
   addTracks: (files: FileList) => void;
   currentTrack: Track | null;
@@ -18,7 +19,7 @@ interface MusicContextType {
   audioRef: React.RefObject<HTMLAudioElement | null>;
 }
 
-const MusicContext = createContext<MusicContextType | null>(null);
+
 
 export function MusicProvider({ children }: { children: ReactNode }) {
   const [tracks, setTracks] = useState<Track[]>([]);
@@ -43,6 +44,18 @@ export function MusicProvider({ children }: { children: ReactNode }) {
   function togglePlay() {
     setIsPlaying((prev) => !prev);
   }
+  function playNext() {
+    if (!currentTrack) return 
+    const index= tracks.findIndex((t)=> t.id=== currentTrack.id)
+    const next= tracks[index+1];
+    if (next) playTrack(next)
+  }
+function playPrev() {
+    if (!currentTrack) return 
+    const index= tracks.findIndex((t)=> t.id=== currentTrack.id)
+    const prev= tracks[index-1];
+    if (prev) playTrack(prev)
+  }
   return (
     <MusicContext.Provider
       value={{
@@ -60,8 +73,4 @@ export function MusicProvider({ children }: { children: ReactNode }) {
   );
 }
 
-export function useMusic() {
-  const ctx = useContext(MusicContext);
-  if (!ctx) throw new Error("useMusic must be used inside MusicProvider");
-  return ctx;
-}
+
