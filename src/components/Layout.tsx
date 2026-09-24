@@ -11,17 +11,27 @@ const navItems = [
 ];
 function Layout() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
   const location = useLocation();
   const { audioRef, isPlaying, currentTrack, togglePlay } = useMusic();
 
   useEffect(() => {
-    if (!audioRef.current) return;
-    if (!isPlaying) {
-      audioRef.current.play();
-    } else {
-      audioRef.current.pause();
+    const audio = audioRef.current;
+    if (!audio) return;
+    function updateTime() {
+      setCurrentTime(audio!.currentTime);
     }
-  }, [currentTrack, isPlaying, audioRef]);
+    function updateDuration() {
+      setDuration(audio!.duration);
+    }
+    audio.addEventListener("timeupdate", updateTime);
+    audio.addEventListener("loadedmetadata", updateDuration);
+    return () => {
+      audio.removeEventListener("timeupdate", updateTime);
+      audio.removeEventListener("loadedmetadata", updateDuration);
+    };
+  }, [currentTrack, audioRef]);
 
   return (
     <div className="min-h-screen bg-[#fafaf8]">
@@ -97,20 +107,6 @@ function Layout() {
             </motion.nav>
           )}
         </AnimatePresence>
-        {currentTrack && (
-          <div className="fixed bottom-0 left-0 right-0 bg-black text-white px-6 py-3 flex items-center gap-4 border-t border-neutral-800">
-            <button onClick={togglePlay}>
-              {isPlaying ? (
-                <Pause className="w-5 h-5" />
-              ) : (
-                <Play className="w-5 h-5" />
-              )}
-            </button>
-            <span className="text-sm font-medium truncate">
-              {currentTrack.title}
-            </span>
-          </div>
-        )}
       </header>
       <AnimatePresence mode="wait">
         <motion.main

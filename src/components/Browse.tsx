@@ -6,6 +6,7 @@ import { Check } from "lucide-react";
 import { useMusic } from "@/context/useMusic";
 import type { ChangeEvent } from "react";
 import { Play, Pause } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 function Browse() {
   const { tracks, addTracks, isPlaying, togglePlay, currentTrack, playTrack } =
@@ -14,6 +15,7 @@ function Browse() {
   const [requestText, setRequestText] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
+  const navigate = useNavigate();
   const handleUpload = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       addTracks(e.target.files);
@@ -46,13 +48,7 @@ function Browse() {
             placeholder="Search by track name or artist..."
             className="w-full text-[15px] max-w-2xl border border-neutral-300 bg-[#f1efe9] rounded px-3 py-4 mt-3 mb-4 outline-0"
           />
-          <Input
-            type="file"
-            accept="audio/*"
-            multiple
-            onChange={handleUpload}
-            className="mb-6 text-sm"
-          />
+          
 
           {tracks.length === 0 ? (
             <p className="text-neutral-500">
@@ -63,12 +59,14 @@ function Browse() {
               <tbody>
                 {tracks.map((track, index) => {
                   const isCurrentTrack = currentTrack?.id === track.id;
+
                   return (
                     <tr
                       key={track.id}
-                      onClick={() =>
-                        isCurrentTrack ? togglePlay() : playTrack(track)
-                      }
+                      onClick={() => {
+                        playTrack(track);
+                        navigate("/player");
+                      }}
                       className="border-b border-neutral-300 hover:bg-[#f1efe9] cursor-pointer"
                     >
                       <td className="py-3 px-2 font-mono text-neutral-500">
@@ -78,7 +76,16 @@ function Browse() {
                         {track.title}
                         {isCurrentTrack && isPlaying && (
                           <span className="ml-2 text-xs text-neutral-500">
-                            <Play className="w-4 h-4"/>Playing
+                            <button
+                              onClick={togglePlay}
+                              className={buttonVariants({variant: "ghost"})}
+                            >
+                              {isPlaying ? (
+                                <Pause className="w-6 h-6" />
+                              ) : (
+                                <Play className="w-6 h-6" />
+                              )}
+                            </button>
                           </span>
                         )}
                       </td>
@@ -91,26 +98,21 @@ function Browse() {
         </div>
         <div className="sticky top-10 mt-14 border border-[#dcd8cc] rounded-lg bg-[#f1efe9] p-5">
           <h3 className="font-display text-lg font-medium mb-2">
-            Can't find your track?
+            Add your Songs
           </h3>
           <p className="text-xs text-neutral-600 mb-4">
-            Tell us what's missing and we'll try to look into it.
+            Browse through and choosse your Music
           </p>
           <form onSubmit={handleSubmit} className="flex flex-col gap-2">
             <Input
-              type="text"
-              value={requestText}
-              onChange={(e) => setRequestText(e.target.value)}
-              placeholder="Track or artist name..."
-              required
-              className="border border-neutral-300 outline-0 bg-white rounded px-3 py-2 text-sm"
-            />
-            <button
-              type="submit"
-              className={buttonVariants({ variant: "default" })}
-            >
-              Send
-            </button>
+            type="file"
+            accept="audio/*"
+            multiple
+            onChange={handleUpload}
+            placeholder="Choose your song"
+            className="text-sm bg-black text-white"
+          />
+           
           </form>
         </div>
       </div>
