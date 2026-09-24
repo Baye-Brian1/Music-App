@@ -1,5 +1,5 @@
 import type { Track } from "@/context/MusicContext"
-import { formatTime } from "@/lib/formatTime";
+
 
 interface AlbumCardProps {
   track: Track;
@@ -23,8 +23,7 @@ function AlbumCard({ track, onClick }: AlbumCardProps) {
       </div>
     </div>
     <div className="pt-3">
-        <p className="text-lg font-medium font-display">{track.title}</p>
-        <p className="text-sm font-sans text-neutral-600 mt-0.5">{formatTime(track.duration)}</p>
+        <p className="text-lg font-medium font-display overflow-hidden">{track.title}</p>
     </div>
   </div>
   );

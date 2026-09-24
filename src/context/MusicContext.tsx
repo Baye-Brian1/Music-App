@@ -7,7 +7,7 @@ export interface Track {
   title: string;
   url: string;
   file: File;
-
+  duration: number
 }
 
 export interface MusicContextType {
@@ -38,6 +38,7 @@ export function MusicProvider({ children }: { children: ReactNode }) {
       title: file.name.replace(/\.[^/.]+$/, ""),
       url: URL.createObjectURL(file),
       file,
+      duration
     }));
     setTracks((prev) => [...prev, ...newTracks]);
   }
