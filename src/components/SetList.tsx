@@ -37,7 +37,6 @@ function SetList() {
         <h1 className="text-4xl font-display font-medium mb-8">
           Build a setlist
         </h1>
-        <p>Tracks in set: {setTracks.length}</p>
         {setTracks.map((track, index) => (
           <div
             key={track.id}
@@ -75,7 +74,7 @@ function SetList() {
           </div>
         ))}
         </div>
-        <div className="p-5 rounded-lg border border-[#dcd8cc] bg-[#f1efe9]">
+        <div className="sticky mt-14 p-5 rounded-lg border border-[#dcd8cc] bg-[#f1efe9]">
             <AddTrackForm onAdd={addTrack} />
         <SetSummary tracks={setTracks} />
         </div>
