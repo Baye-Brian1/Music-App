@@ -32,7 +32,7 @@ function SetList() {
 
   return (
     <div className="min-h-screen bg-[#fafaf8] text-black p-10">
-      <div className="max-w-2xl">
+      <div className="max-w-6xl mx-auto px-6 py-4">
         <h1 className="text-4xl font-display font-medium mb-8">
           Build a setlist
         </h1>

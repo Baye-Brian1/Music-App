@@ -2,6 +2,8 @@ import { useState, type SubmitEvent } from "react";
 import { tracks } from "@/data/tracks";
 import type { Track } from "@/data/tracks";
 import { motion, AnimatePresence } from "motion/react";
+import { Input } from "./ui/input";
+import { Button } from "./ui/button";
 import { Check } from "lucide-react";
 
 function Browse() {
@@ -40,31 +42,28 @@ function Browse() {
 
   return (
     <div className="min-h-screen bg-[#fafaf8] p-10 text-black">
-      <div className="max-w-6xl grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-10 items-center ">
+      <div className="max-w-6xl py-4 px-6 mx-auto grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-10 items-start">
         <div>
           <h1 className="text-4xl font-display font-medium">Browse tracks</h1>
 
-          <input
+          <Input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search by track name or artist..."
-            className="w-full text-[15px] max-w-2xl border border-neutral-300 bg-[#f1efe9] rounded px-3 py-2 mt-3 mb-4 outline-0"
+            className="w-full text-[15px] max-w-2xl border border-neutral-300 bg-[#f1efe9] rounded px-3 py-4 mt-3 mb-4 outline-0"
           />
           <div className="flex gap-2 mb-6">
             {genres.map((g) => (
-              <button
+              <Button
                 key={g}
                 onClick={() => setGenre(g)}
-                className={`text-sm px-3 py-1.5 rounded-full cursor-pointer border transition-all
-                ${
-                  genre === g
-                    ? "bg-[#0a0a0a] text-white border-[#0a0a0a]"
-                    : "border-neutral-300 text-neutral-700 hover:border-neutral-500"
-                } `}
+                className='cursor-pointer'
+                
+                variant={genre === g? "default":"outline"}
               >
                 {genreLabels[g]}
-              </button>
+              </Button>
             ))}
           </div>
           {filtered.length === 0 ? (
@@ -102,7 +101,7 @@ function Browse() {
             </table>
           )}
         </div>
-        <div className="sticky top-10 w-99 border border-[#dcd8cc] rounded-lg bg-[#f1efe9] p-5">
+        <div className="sticky top-10 border border-[#dcd8cc] rounded-lg bg-[#f1efe9] p-5">
           <h3 className="font-display text-lg font-medium mb-2">
             Can't find your track?
           </h3>
@@ -110,7 +109,7 @@ function Browse() {
             Tell us what's missing and we'll try to look into it.
           </p>
           <form onSubmit={handleSubmit} className="flex flex-col gap-2">
-            <input
+            <Input
               type="text"
               value={requestText}
               onChange={(e) => setRequestText(e.target.value)}
@@ -118,12 +117,12 @@ function Browse() {
               required
               className="border border-neutral-300 outline-0 bg-white rounded px-3 py-2 text-sm"
             />
-            <button
+            <Button
               type="submit"
-              className="bg-[#0a0a0a] cursor-pointer text-white px-4 py-2 rounded text-sm font-medium hover:bg-neutral-800 transition-colors"
+              variant="default"
             >
               Send
-            </button>
+            </Button>
           </form>
         </div>
       </div>

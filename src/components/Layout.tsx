@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
-import { Key, Menu, X } from "lucide-react";
-import type React from "react";
+import { Menu, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 
 const navItems = [
@@ -88,6 +87,7 @@ function Layout() {
       </header>
       <AnimatePresence mode="wait">
         <motion.main
+          key={location.pathname}
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -8 }}
