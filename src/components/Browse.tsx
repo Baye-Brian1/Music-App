@@ -1,4 +1,4 @@
-import { useState, type SubmitEvent } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Input } from "./ui/input";
 import { buttonVariants } from "./ui/button";
@@ -12,13 +12,15 @@ function Browse() {
   const { tracks, addTracks, isPlaying, togglePlay, currentTrack, playTrack } =
     useMusic();
   const [search, setSearch] = useState("");
-  const [requestText, setRequestText] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
   const navigate = useNavigate();
   const handleUpload = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       addTracks(e.target.files);
+      setSubmitted(true);
+
+    setTimeout(() => setSubmitted(false), 5000);
     }
   };
   const filtered = tracks.filter((track) => {
@@ -28,12 +30,6 @@ function Browse() {
     return matchesSearch;
   });
 
-  const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setSubmitted(true);
-    setRequestText("");
-    setTimeout(() => setSubmitted(false), 5000);
-  };
 
   return (
     <div className="min-h-screen bg-[#fafaf8] p-10 text-black">
@@ -48,9 +44,8 @@ function Browse() {
             placeholder="Search by track name or artist..."
             className="w-full text-[15px] max-w-2xl border border-neutral-300 bg-[#f1efe9] rounded px-3 py-4 mt-3 mb-4 outline-0"
           />
-          
 
-          {tracks.length === 0 ? (
+          {filtered.length === 0 ? (
             <p className="text-neutral-500">
               No tracks uploaded yet add some above.
             </p>
@@ -74,20 +69,6 @@ function Browse() {
                       </td>
                       <td className="py-3 font-medium">
                         {track.title}
-                        {isCurrentTrack && isPlaying && (
-                          <span className="ml-2 text-xs text-neutral-500">
-                            <button
-                              onClick={togglePlay}
-                              className={buttonVariants({variant: "ghost"})}
-                            >
-                              {isPlaying ? (
-                                <Pause className="w-6 h-6" />
-                              ) : (
-                                <Play className="w-6 h-6" />
-                              )}
-                            </button>
-                          </span>
-                        )}
                       </td>
                     </tr>
                   );
@@ -103,17 +84,24 @@ function Browse() {
           <p className="text-xs text-neutral-600 mb-4">
             Browse through and choosse your Music
           </p>
-          <form onSubmit={handleSubmit} className="flex flex-col gap-2">
-            <Input
-            type="file"
-            accept="audio/*"
-            multiple
-            onChange={handleUpload}
-            placeholder="Choose your song"
-            className="text-sm bg-black text-white"
-          />
-           
-          </form>
+          
+            <label
+              htmlFor="file-upload"
+              className={
+                buttonVariants({ variant: "default" }) +
+                " cursor-pointer w-full justify-center"
+              }
+            >
+              Choose songs to upload
+            </label>
+            <input
+              id="file-upload"
+              type="file"
+              accept="audio/*"
+              multiple
+              onChange={handleUpload}
+              className="hidden"
+            />
         </div>
       </div>
       <AnimatePresence>
@@ -125,7 +113,7 @@ function Browse() {
             className="fixed bottom-6 right-6 bg-black text-white text-sm px-4 py-3 rounded-md shadow-lg flex items-center gap-2"
           >
             <Check className="w-4 h-4" />
-            Thanks! we'll look into it.
+            Your songs have been selected
           </motion.div>
         )}
       </AnimatePresence>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
-import { Menu, X, Play, Pause } from "lucide-react";
+import { Menu, X,  } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useMusic } from "@/context/useMusic";
 
@@ -11,27 +11,16 @@ const navItems = [
 ];
 function Layout() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
   const location = useLocation();
-  const { audioRef, isPlaying, currentTrack, togglePlay } = useMusic();
-
+  const { audioRef,  currentTrack, isPlaying } = useMusic();
   useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-    function updateTime() {
-      setCurrentTime(audio!.currentTime);
-    }
-    function updateDuration() {
-      setDuration(audio!.duration);
-    }
-    audio.addEventListener("timeupdate", updateTime);
-    audio.addEventListener("loadedmetadata", updateDuration);
-    return () => {
-      audio.removeEventListener("timeupdate", updateTime);
-      audio.removeEventListener("loadedmetadata", updateDuration);
-    };
-  }, [currentTrack, audioRef]);
+  if (!audioRef.current) return;
+  if (isPlaying) {
+    audioRef.current.play();
+  } else {
+    audioRef.current.pause();
+  }
+}, [isPlaying, currentTrack, audioRef]);
 
   return (
     <div className="min-h-screen bg-[#fafaf8]">
