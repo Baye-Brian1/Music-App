@@ -5,8 +5,8 @@ import { AnimatePresence, motion } from "motion/react";
 import { useMusic } from "@/context/useMusic";
 
 const navItems = [
-  { to: "/", label: "Library" },
-  { to: "/browse", label: "Browse" },
+  { to: "/", label: "Browse" },
+  { to: "/album", label: "Library" },
   { to: "/play", label: "Play" },
 ];
 function Layout() {

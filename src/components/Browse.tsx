@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Input } from "./ui/input";
 import { buttonVariants } from "./ui/button";
-import { Check } from "lucide-react";
+import { Check, Music } from "lucide-react";
 import { useMusic } from "@/context/useMusic";
 import type { ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
@@ -45,9 +45,17 @@ function Browse() {
           />
 
           {filtered.length === 0 ? (
-            <p className="text-neutral-500">
-              No tracks uploaded yet add some above.
-            </p>
+            <div className="flex flex-col items-center justify-center text-center p-12 border border-dashed border-neutral-300 rounded-lg max-w-2xl bg-[#f5f3ed]/50 my-6">
+              <div className="w-12 h-12 rounded-full bg-neutral-200/60 flex items-center justify-center mb-4">
+                <Music className="w-6 h-6 text-neutral-500" />
+              </div>
+              <h3 className="font-medium text-base mb-1">No tracks found</h3>
+              <p className="text-sm text-neutral-500 max-w-xs">
+                {tracks.length === 0 
+                  ? "No tracks uploaded yet. Use the sidebar to add some above." 
+                  : "No matches found. Try adjusting your keywords."}
+              </p>
+            </div>
           ) : (
             <table className="w-full">
               <tbody>

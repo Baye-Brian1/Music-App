@@ -8,9 +8,10 @@ function App() {
   return (
     <Routes>
       <Route element={<Layout />}>
-        <Route path="/" element={<AlbumGrid />} />
+        <Route path="/" element={<Browse />} />
+        <Route path="album" element={<AlbumGrid />} />
         <Route path="/play" element={<NowPlaying />} />
-        <Route path="/browse" element={<Browse />} />
+        
       </Route>
     </Routes>
   );
