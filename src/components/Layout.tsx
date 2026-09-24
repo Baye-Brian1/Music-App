@@ -6,7 +6,7 @@ import { AnimatePresence, motion } from "motion/react";
 const navItems = [
   { to: "/", label: "Library" },
   { to: "/browse", label: "Browse" },
-  { to: "/setlist", label: "Setlist" },
+  { to: "/setlist", label: "Setlist" }
 ];
 function Layout() {
   const [menuOpen, setMenuOpen] = useState(false);

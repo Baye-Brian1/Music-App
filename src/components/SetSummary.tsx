@@ -17,9 +17,10 @@ function SetSummary({tracks}: SetSummaryProps) {
     }
     const totalSeconds= tracks.reduce((sum, track)=> sum+toSeconds(track.duration), 0)
     return(
-        <div>
-            <p>Tracks: {tracks.length}</p>
-            <p>Tracks length: {toDurationString(totalSeconds)}</p>
+        <div className="flex flex-col gap-2 mt-3">
+            <p className="px-2 ">Total tracks: {tracks.length}</p>
+            <p className="border  border-[#dcd8cc]"></p>
+            <p className="px-2 ">Tracks length: {toDurationString(totalSeconds)}</p>
         </div>
     );
 }

@@ -3,7 +3,7 @@ import { tracks } from "@/data/tracks";
 import type { Track } from "@/data/tracks";
 import { motion, AnimatePresence } from "motion/react";
 import { Input } from "./ui/input";
-import { Button } from "./ui/button";
+import { buttonVariants } from "./ui/button";
 import { Check } from "lucide-react";
 
 function Browse() {
@@ -53,18 +53,31 @@ function Browse() {
             placeholder="Search by track name or artist..."
             className="w-full text-[15px] max-w-2xl border border-neutral-300 bg-[#f1efe9] rounded px-3 py-4 mt-3 mb-4 outline-0"
           />
-          <div className="flex gap-2 mb-6">
-            {genres.map((g) => (
-              <Button
-                key={g}
-                onClick={() => setGenre(g)}
-                className='cursor-pointer'
-                
-                variant={genre === g? "default":"outline"}
-              >
-                {genreLabels[g]}
-              </Button>
-            ))}
+          <div className="grid grid-cols-3 sm:grid-cols-2 lg:flex gap-2 mb-6">
+            {genres.map((g) => {
+              const isCurrent = genre === g;
+              return (
+                <motion.button
+                  key={g}
+                  onClick={() => setGenre(g)}
+                  className={buttonVariants({
+                    variant: isCurrent ? "default" : "outline",
+                    className: "cursor-pointer",
+                  })}
+                  whileHover={{
+                    scale: 1.05,
+                    y: -2,
+                    transition:{type:"keyframes", duration:0.2}
+                  }}
+                  whileTap={{
+                    scale: 0.95,
+                    y: 0,
+                  }}
+                >
+                  {genreLabels[g]}
+                </motion.button>
+              );
+            })}
           </div>
           {filtered.length === 0 ? (
             <p className="text-neutral-500">
@@ -101,7 +114,7 @@ function Browse() {
             </table>
           )}
         </div>
-        <div className="sticky top-10 border border-[#dcd8cc] rounded-lg bg-[#f1efe9] p-5">
+        <div className="sticky top-10 mt-14 border border-[#dcd8cc] rounded-lg bg-[#f1efe9] p-5">
           <h3 className="font-display text-lg font-medium mb-2">
             Can't find your track?
           </h3>
@@ -117,12 +130,12 @@ function Browse() {
               required
               className="border border-neutral-300 outline-0 bg-white rounded px-3 py-2 text-sm"
             />
-            <Button
+            <button
               type="submit"
-              variant="default"
+              className={buttonVariants({ variant: "default" })}
             >
               Send
-            </Button>
+            </button>
           </form>
         </div>
       </div>
@@ -135,7 +148,7 @@ function Browse() {
             className="fixed bottom-6 right-6 bg-black text-white text-sm px-4 py-3 rounded-md shadow-lg flex items-center gap-2"
           >
             <Check className="w-4 h-4" />
-            Thanks — we'll look into it.
+            Thanks! we'll look into it.
           </motion.div>
         )}
       </AnimatePresence>
