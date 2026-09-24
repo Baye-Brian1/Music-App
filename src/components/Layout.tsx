@@ -8,7 +8,6 @@ const navItems = [
   { to: "/", label: "Library" },
   { to: "/browse", label: "Browse" },
   { to: "/play", label: "Play" },
-  { to: "/setlist", label: "Setlist" },
 ];
 function Layout() {
   const [menuOpen, setMenuOpen] = useState(false);
