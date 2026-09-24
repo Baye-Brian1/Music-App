@@ -7,6 +7,7 @@ import { useMusic } from "@/context/useMusic";
 const navItems = [
   { to: "/", label: "Library" },
   { to: "/browse", label: "Browse" },
+  { to: "/play", label: "Play" },
   { to: "/setlist", label: "Setlist" },
 ];
 function Layout() {

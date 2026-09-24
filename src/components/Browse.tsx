@@ -5,11 +5,10 @@ import { buttonVariants } from "./ui/button";
 import { Check } from "lucide-react";
 import { useMusic } from "@/context/useMusic";
 import type { ChangeEvent } from "react";
-import { Play, Pause } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 function Browse() {
-  const { tracks, addTracks, isPlaying, togglePlay, currentTrack, playTrack } =
+  const { tracks, addTracks,  playTrack } =
     useMusic();
   const [search, setSearch] = useState("");
   const [submitted, setSubmitted] = useState(false);
@@ -53,14 +52,12 @@ function Browse() {
             <table className="w-full">
               <tbody>
                 {tracks.map((track, index) => {
-                  const isCurrentTrack = currentTrack?.id === track.id;
-
                   return (
                     <tr
                       key={track.id}
                       onClick={() => {
                         playTrack(track);
-                        navigate("/player");
+                        navigate("/play");
                       }}
                       className="border-b border-neutral-300 hover:bg-[#f1efe9] cursor-pointer"
                     >

@@ -2,11 +2,12 @@ import { useRef, useState, useEffect } from "react";
 import { MusicContext } from "./useMusic";
 import type { ReactNode } from "react";
 
-interface Track {
+export interface Track {
   id: string;
   title: string;
   url: string;
   file: File;
+  duration: number;
 }
 
 export interface MusicContextType {
@@ -32,13 +33,22 @@ export function MusicProvider({ children }: { children: ReactNode }) {
   const audioRef = useRef<HTMLAudioElement>(null);
 
   function addTracks(files: FileList) {
-    const newTracks: Track[] = Array.from(files).map((file) => ({
-      id: crypto.randomUUID(),
-      title: file.name.replace(/\.[^/.]+$/, ""),
-      url: URL.createObjectURL(file),
-      file,
-    }));
-    setTracks((prev) => [...prev, ...newTracks]);
+    Array.from(files).forEach((file) => {
+      const url = URL.createObjectURL(file);
+      const audio = new Audio(url);
+
+      audio.addEventListener("loadedmetadata", () => {
+        const newTrack: Track = {
+          id: crypto.randomUUID(),
+          title: file.name.replace(/\.[^/.]+$/, ""),
+          url,
+          file,
+          duration: audio.duration,
+        };
+        setTracks((prev) => [...prev, newTrack]);
+      });
+    });
+    
   }
 
   function playTrack(track: Track) {
@@ -69,17 +79,17 @@ export function MusicProvider({ children }: { children: ReactNode }) {
     function updateDuration() {
       setDuration(audio!.duration);
     }
-    function handledEnded(){
-        playNext();
+    function handledEnded() {
+      playNext();
     }
     audio.addEventListener("timeupdate", updateTime);
     audio.addEventListener("loadedmetadata", updateDuration);
-    audio.addEventListener("ended", handledEnded)
+    audio.addEventListener("ended", handledEnded);
     return () => {
       audio.removeEventListener("timeupdate", updateTime);
       audio.removeEventListener("loadedmetadata", updateDuration);
     };
-  }, [currentTrack, audioRef]);
+  }, [currentTrack, audioRef ]);
   return (
     <MusicContext.Provider
       value={{

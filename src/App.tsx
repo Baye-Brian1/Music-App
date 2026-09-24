@@ -10,7 +10,7 @@ function App() {
     <Routes>
       <Route element={<Layout />}>
         <Route path="/" element={<AlbumGrid />} />
-        <Route path="/player" element={<NowPlaying />} />
+        <Route path="/play" element={<NowPlaying />} />
         <Route path="/browse" element={<Browse />} />
         <Route path="/setlist" element={<SetList />} />
       </Route>

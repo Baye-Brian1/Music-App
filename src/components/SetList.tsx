@@ -4,6 +4,7 @@ import { initialSet } from "@/data/setTracks";
 import AddTrackForm from "./ui/AddTrackForm";
 import SetSummary from "./SetSummary";
 import { Button } from "@/components/ui/button";
+import { formatTime } from "@/lib/formatTime";
 import { ChevronUp, ChevronDown, X } from "lucide-react";
 
 function SetList() {
@@ -62,7 +63,7 @@ function SetList() {
             </div>
             <span className="flex-1 text-sm font-medium">{track.title}</span>
             <span className="font-mono text-xs text-neutral-600">
-              {track.duration}
+              {formatTime(track.duration)}
             </span>
             <Button
               variant="ghost"

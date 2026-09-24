@@ -1,12 +1,14 @@
-import type { Album } from "@/data/albums";
+import type { Track } from "@/context/MusicContext"
+import { formatTime } from "@/lib/formatTime";
 
 interface AlbumCardProps {
-  album: Album;
+  track: Track;
+  onClick?: ()=> void
 }
 
-function AlbumCard({ album }: AlbumCardProps) {
+function AlbumCard({ track, onClick }: AlbumCardProps) {
   return(
-    <div>
+    <div onClick={onClick} className="cursor-pointer group">
     <div
       className="aspect-square rounded border border-[#dcd8cc] bg-[#f1efe9] relative overflow-hidden"
       style={{
@@ -21,9 +23,8 @@ function AlbumCard({ album }: AlbumCardProps) {
       </div>
     </div>
     <div className="pt-3">
-        <p className="text-lg font-medium font-display">{album.name}</p>
-        <p className="text-sm font-sans text-neutral-600 mt-0.5">{album.artist}</p>
-        <span className="inline-block text-[10px] font-mono mt-2 text-neutral-500 border border-[#dcd8cc] rounded-full px-2 py-0.5">{album.tag}</span>
+        <p className="text-lg font-medium font-display">{track.title}</p>
+        <p className="text-sm font-sans text-neutral-600 mt-0.5">{formatTime(track.duration)}</p>
     </div>
   </div>
   );
